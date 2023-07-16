@@ -13,14 +13,23 @@ import java.util.List;
  * @author lethi
  */
 public class ServerThreadBus {
-    ArrayList<ServerThread> listServerThread;
+
+    public static ArrayList<ServerThread> listServerThread;
 
     public ServerThreadBus() {
-        listServerThread= new ArrayList<>();
+        listServerThread = new ArrayList<>();
     }
-    public void add(ServerThread socket){
+
+    public void add(ServerThread socket) {
         listServerThread.add(socket);
     }
 
-    
+    public void remove(String idSeverThread) {
+        for (ServerThread s : listServerThread) {
+            if(s.getServerThreadId().equalsIgnoreCase(idSeverThread)){
+                listServerThread.remove(s);
+            }
+        }
+    }
+
 }

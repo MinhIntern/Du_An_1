@@ -4,13 +4,14 @@
  */
 package Model;
 
+import java.io.Serializable;
 import java.sql.Date;
 
 /**
  *
  * @author lethi
  */
-public class LoaiMA {
+public class LoaiMA implements Serializable{
 
     private String ID;
     private String TEN;

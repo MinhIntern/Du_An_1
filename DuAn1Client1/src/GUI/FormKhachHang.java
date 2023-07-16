@@ -4,7 +4,6 @@
  */
 package GUI;
 
-import Dao.KhachHangDao;
 import Model.KhachHang;
 import java.util.ArrayList;
 import javax.swing.table.DefaultTableModel;
@@ -19,7 +18,7 @@ public class FormKhachHang extends javax.swing.JPanel {
      * Creates new form FormKhachHang
      */
     public static DefaultTableModel model = new DefaultTableModel();
-     ArrayList<KhachHang> ds = new KhachHangDao().GetArrayListAll();
+     ArrayList<KhachHang> ds ;
     public FormKhachHang() {
         initComponents();
         model = (DefaultTableModel) tblKhachHang.getModel();
@@ -287,7 +286,7 @@ public class FormKhachHang extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void txtTimKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTimKeyReleased
-        ArrayList<KhachHang> ds = new KhachHangDao().GetArrayListByTenSP(txtTim.getText());
+//        ArrayList<KhachHang> ds = new KhachHangDao().GetArrayListByTenSP(txtTim.getText());
         model.setRowCount(0);
         for (int i = 0; i < ds.size(); i++) {
             String Makh = ds.get(i).getMaKH();

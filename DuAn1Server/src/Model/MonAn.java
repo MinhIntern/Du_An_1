@@ -1,5 +1,6 @@
 package Model;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -7,7 +8,7 @@ import java.util.Date;
  *
  * @author lethi
  */
-public class MonAn {
+public class MonAn implements Serializable {
 
     private String ID;
     private String Ten;

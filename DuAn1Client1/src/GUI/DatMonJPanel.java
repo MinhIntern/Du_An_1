@@ -6,8 +6,6 @@ package GUI;
 
 import ClientServer.ClientController.ClientServer;
 import ClientServer.ClientController.HandleSocket;
-import Dao.LoaiMADAO;
-import Dao.MonAnDAO;
 import Model.LoaiMA;
 import Model.MonAn;
 import Utils.WrapLayout;
@@ -31,8 +29,8 @@ public class DatMonJPanel extends javax.swing.JPanel {
 
     static ChonBan c = new ChonBan();
     String banDaChon = "";
-    ArrayList<MonAn> dsMonAn = new MonAnDAO().GetArrayListAll();
-    ArrayList<LoaiMA> dsLoai = new LoaiMADAO().GetArrayListAll();
+    public static ArrayList<MonAn> dsMonAn ;
+    public static ArrayList<LoaiMA> dsLoai ;
     ArrayList<MonAn> dsmonByLoai = new ArrayList<>();
     ArrayList<Object[]> dsKhachChon = new ArrayList<>();
 
@@ -42,7 +40,7 @@ public class DatMonJPanel extends javax.swing.JPanel {
     public DatMonJPanel() {
         initComponents();
         danhsachtext.setEditable(false);
-        ResetPanelMonAn();
+        
 
     }
     void ResetPanelMonAn(){
@@ -89,7 +87,7 @@ public class DatMonJPanel extends javax.swing.JPanel {
                 JPanel panel = new JPanel();
                 panel.setSize(new Dimension(800, (700 - 20) / totalproduct));
                 MonAnPanel.add(panel);
-                panelMonAn("C:\\Users\\lethi\\Desktop\\DA1\\DuAn1\\src\\IMG\\hinhtrasua.png", dsmonByLoai.get(j).getID(), dsmonByLoai.get(j).getTen(), dsmonByLoai.get(j).getDongia().toString(), String.valueOf(dsmonByLoai.get(j).getSoluong()), panel);
+                panelMonAn("DuAn1Client1\\src\\IMG\\hinhtrasua.png", dsmonByLoai.get(j).getID(), dsmonByLoai.get(j).getTen(), dsmonByLoai.get(j).getDongia().toString(), String.valueOf(dsmonByLoai.get(j).getSoluong()), panel);
             }
         } else {
             for (int j = i; j < soproduct; j++) {
@@ -97,7 +95,7 @@ public class DatMonJPanel extends javax.swing.JPanel {
                 JPanel panel = new JPanel();
                 panel.setSize(new Dimension(800, (700 - 20) / totalproduct));
                 MonAnPanel.add(panel);
-                panelMonAn("C:\\Users\\lethi\\Desktop\\DA1\\DuAn1\\src\\IMG\\hinhtrasua.png", dsmonByLoai.get(j).getID(), dsmonByLoai.get(j).getTen(), dsmonByLoai.get(j).getDongia().toString(), String.valueOf(dsmonByLoai.get(j).getSoluong()), panel);
+                panelMonAn("DuAn1Client1\\src\\IMG\\hinhtrasua.png", dsmonByLoai.get(j).getID(), dsmonByLoai.get(j).getTen(), dsmonByLoai.get(j).getDongia().toString(), String.valueOf(dsmonByLoai.get(j).getSoluong()), panel);
             }
             for (int j = 0; j < totalproduct - (soproduct - i); j++) {
                 MonAnPanel.add(new JPanel());
@@ -112,18 +110,34 @@ public class DatMonJPanel extends javax.swing.JPanel {
         public void actionPerformed(ActionEvent e) {
             JButton x = (JButton) e.getSource();
             JPanel xpanel = (JPanel) x.getParent();
-            JLabel labelsoluong = new JLabel();
-            String gia = new MonAnDAO().getObjectByID(x.getName()).getDongia().toString();
+            JPanel giapanel= (JPanel) xpanel.getParent();
+            JPanel paneltong = (JPanel) giapanel.getParent();
+            String gia="" ;
+            String ten = "";
+            for (Component c : giapanel.getComponents()) {
+                if ((c instanceof JLabel)&&c.getName().equalsIgnoreCase("gia")) {
+                        gia = ((JLabel) c).getText().substring(0,((JLabel) c).getText().indexOf(" "));
+                }
+            }
+            
+            for (Component c : paneltong.getComponents()) {
+                if ((c instanceof JLabel)&&c.getName().equalsIgnoreCase("ten")) {
+                        ten = ((JLabel) c).getText();
+                }
+            }
+            
+            JLabel labelsoluong = new JLabel();//thay đổi label số lượng
             for (Component c : xpanel.getComponents()) {
                 if (c instanceof JLabel) {
                     labelsoluong = (JLabel) c;
                     if (((JLabel) c).getText().equals("0")) {
-                        Object[] o = new Object[]{x.getName(), "0", gia};
+                        Object[] o = new Object[]{x.getName(), "0", gia,ten};
                         dsKhachChon.add(o);
                     }
                 }
             }
             String text = x.getText();
+            
             if (text.equals("+")) {
                 labelsoluong.setText(String.valueOf(Integer.parseInt(labelsoluong.getText()) + 1));
                 for (Object[] o : dsKhachChon) {
@@ -174,6 +188,7 @@ public class DatMonJPanel extends javax.swing.JPanel {
         tenlabel.setFont(new Font("Aria", Font.BOLD, 20));
         tenlabel.setSize(width * 4 / 5 - 10, height / 2 - 5);
         tenlabel.setText(ten);
+        tenlabel.setName("ten");
 
         //giaPanel
         JPanel giaPanel = new JPanel(new BorderLayout());
@@ -182,6 +197,7 @@ public class DatMonJPanel extends javax.swing.JPanel {
         JLabel giaLabel = new JLabel();
         giaLabel.setFont(new Font("Aria", Font.BOLD, 16));
         giaLabel.setText(gia + " VND");
+        giaLabel.setName("gia");
 
         JPanel soluongPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 
@@ -189,6 +205,7 @@ public class DatMonJPanel extends javax.swing.JPanel {
         soluongLabel.setSize(width, height);
         soluongLabel.setHorizontalAlignment(SwingConstants.CENTER);
         soluongLabel.setText("0");
+        soluongLabel.setName("soluong");
 
         //2 button
         JButton tangButton = new JButton();
@@ -224,8 +241,7 @@ public class DatMonJPanel extends javax.swing.JPanel {
         danhsachtext.setText("");
         for (Object[] o : ds) {
             String x = danhsachtext.getText();
-            String name = new MonAnDAO().getObjectByID(String.valueOf(o[0])).getTen();
-            danhsachtext.setText(x + " - Tên:" + name + "\n" + " - Số lượng: " + o[1] + "\n - Đơn giá: " + o[2] + "\n -------------------------------\n");
+            danhsachtext.setText(x + " - Tên:" + o[3] + "\n" + " - Số lượng: " + o[1] + "\n - Đơn giá: " + o[2] + "\n -------------------------------\n");
             total = total + Double.valueOf(String.valueOf(o[2])) * Double.valueOf(String.valueOf(o[1]));
         }
         totaltext.setText(String.valueOf(total));
@@ -239,8 +255,9 @@ public class DatMonJPanel extends javax.swing.JPanel {
     public void orderSuccesfull() {
         JOptionPane.showMessageDialog(this, "Order thành công");
         danhsachtext.setText("");
-        dsKhachChon.removeAll(dsKhachChon);
+        dsKhachChon.clear();
         banDaChon = "";
+        banLabel.setText("");
         ResetPanelMonAn();
     }
 
@@ -388,6 +405,7 @@ public class DatMonJPanel extends javax.swing.JPanel {
             HandleSocket.write("Create-order");
             HandleSocket.write(banDaChon);
             HandleSocket.write(dsKhachChon);
+            System.out.println(dsKhachChon.toString());
         }
 
 

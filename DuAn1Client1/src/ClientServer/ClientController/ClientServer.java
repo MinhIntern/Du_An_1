@@ -22,13 +22,16 @@ public class ClientServer {
     public static HandleSocket handleSocket;
     public static TrangQuanLyNV trangQuanLyNV;
 
+    public ClientServer() {
+    }
+
     public static void main(String[] args) {
-         
          try {
             handleSocket = new HandleSocket();
             handleSocket.run();
             
         } catch (Exception e) {
+            e.printStackTrace();
              JOptionPane.showMessageDialog(null, "Admin chua hoat dong");
         }
          
